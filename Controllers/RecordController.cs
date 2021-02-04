@@ -12,9 +12,9 @@ namespace inTune.Controllers
 {
     public class RecordController : Controller
     {
-        private readonly RecordContext _context;
+        private readonly inTuneContext _context;
 
-        public RecordController(RecordContext context)
+        public RecordController(inTuneContext context)
         {
             _context = context;
         }
@@ -22,7 +22,7 @@ namespace inTune.Controllers
         // GET: Record
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Records.ToListAsync());
+            return View(await _context.Records.Include(r => r.Artist).ToListAsync());
         }
 
         // GET: Record/Details/5
@@ -34,7 +34,7 @@ namespace inTune.Controllers
             }
 
             var record = await _context.Records
-                .FirstOrDefaultAsync(m => m.RecordId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (record == null)
             {
                 return NotFound();
@@ -88,7 +88,7 @@ namespace inTune.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("RecordId,Artist,Title,Year,NumOfTracks")] Record record)
         {
-            if (id != record.RecordId)
+            if (id != record.Id)
             {
                 return NotFound();
             }
@@ -102,7 +102,7 @@ namespace inTune.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RecordExists(record.RecordId))
+                    if (!RecordExists(record.Id))
                     {
                         return NotFound();
                     }
@@ -125,7 +125,7 @@ namespace inTune.Controllers
             }
 
             var record = await _context.Records
-                .FirstOrDefaultAsync(m => m.RecordId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (record == null)
             {
                 return NotFound();
@@ -147,7 +147,7 @@ namespace inTune.Controllers
 
         private bool RecordExists(int id)
         {
-            return _context.Records.Any(e => e.RecordId == id);
+            return _context.Records.Any(e => e.Id == id);
         }
     }
 }
