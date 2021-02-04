@@ -7,15 +7,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace inTune.Data
 {
-    public class RecordContext:DbContext
+    public class inTuneContext:DbContext
     {
         // Constructor
-        public RecordContext(DbContextOptions<RecordContext> options):base(options)
+        public inTuneContext(DbContextOptions<inTuneContext> options):base(options)
         {
 
         }
 
         // Create a DbSet
         public DbSet<Record> Records { get; set; }
+        public DbSet<Artist> Artists { get; set; }
     }
 }
