@@ -8,8 +8,8 @@ using inTune.Data;
 
 namespace inTune.Migrations
 {
-    [DbContext(typeof(RecordContext))]
-    [Migration("20210203205523_InitialCreate")]
+    [DbContext(typeof(inTuneContext))]
+    [Migration("20210204042556_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,14 +20,29 @@ namespace inTune.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.2");
 
-            modelBuilder.Entity("inTune.Models.Record", b =>
+            modelBuilder.Entity("inTune.Models.Artist", b =>
                 {
-                    b.Property<int>("RecordId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("Artist")
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Artists");
+                });
+
+            modelBuilder.Entity("inTune.Models.Record", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("ArtistId")
                         .HasColumnType("int");
 
                     b.Property<int>("NumOfTracks")
@@ -39,9 +54,27 @@ namespace inTune.Migrations
                     b.Property<string>("Year")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("RecordId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArtistId");
 
                     b.ToTable("Records");
+                });
+
+            modelBuilder.Entity("inTune.Models.Record", b =>
+                {
+                    b.HasOne("inTune.Models.Artist", "Artist")
+                        .WithMany("Discography")
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artist");
+                });
+
+            modelBuilder.Entity("inTune.Models.Artist", b =>
+                {
+                    b.Navigation("Discography");
                 });
 #pragma warning restore 612, 618
         }
