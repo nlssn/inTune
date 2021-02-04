@@ -28,7 +28,7 @@ namespace inTune
             services.AddControllersWithViews();
 
             // Add DbContext service
-            services.AddDbContext<RecordContext>(options =>
+            services.AddDbContext<inTuneContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultDbString"))
             );
         }
