@@ -20,9 +20,15 @@ namespace inTune.Controllers
         }
 
         // GET: Record
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Records.Include(r => r.Artist).ToListAsync());
+            var records = from r in _context.Records select r;
+
+            if (!String.IsNullOrEmpty(searchString)){
+                records = records.Where(s => s.Title.Contains(searchString));
+            }
+
+            return View(await records.Include(r => r.Artist).ToListAsync());
         }
 
         // GET: Record/Details/5
