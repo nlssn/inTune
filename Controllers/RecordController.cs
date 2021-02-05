@@ -39,7 +39,7 @@ namespace inTune.Controllers
                 return NotFound();
             }
 
-            var record = await _context.Records
+            var record = await _context.Records.Include(r => r.Artist)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (record == null)
             {
