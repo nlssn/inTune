@@ -20,6 +20,7 @@ namespace inTune.Controllers
         }
 
         // GET: Record
+        [Route("Records")]
         public async Task<IActionResult> Index(string searchString)
         {
             var records = from r in _context.Records select r;
