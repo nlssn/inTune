@@ -1,6 +1,6 @@
 using System;
 
-namespace inTune.ViewModels
+namespace inTune.Models
 {
     public class ErrorViewModel
     {
