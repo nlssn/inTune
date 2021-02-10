@@ -20,6 +20,7 @@ namespace inTune.ViewModels
         public int NumOfTracks { get; set; }
 
         [Required(ErrorMessage = "Artist is required")]
+        [Display(Name = "Artist")]
         public int ArtistId { get; set; }
 
         public List<SelectListItem> Artists { get; set; }
