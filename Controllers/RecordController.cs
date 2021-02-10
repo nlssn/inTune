@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using inTune.Data;
 using inTune.Models;
+using inTune.ViewModels;
 
 namespace inTune.Controllers
 {
@@ -53,7 +54,10 @@ namespace inTune.Controllers
         // GET: Record/Create
         public IActionResult Create()
         {
-            return View();
+            List<Artist> artists = _context.Artists.ToList();
+            AddRecordViewModel addRecordViewModel = new AddRecordViewModel(artists);
+
+            return View(addRecordViewModel);
         }
 
         // POST: Record/Create
@@ -61,15 +65,26 @@ namespace inTune.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RecordId,Artist,Title,Year,NumOfTracks")] Record record)
+        //[Bind("RecordId,Artist,Title,Year,NumOfTracks")] Record record
+        public async Task<IActionResult> Create(AddRecordViewModel addRecordViewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(record);
+                Artist theArtist = _context.Artists.Find(addRecordViewModel.ArtistId);
+
+                Record newRecord = new Record
+                {
+                    Title = addRecordViewModel.Title,
+                    Year = addRecordViewModel.Year,
+                    NumOfTracks = addRecordViewModel.NumOfTracks,
+                    Artist = theArtist
+                };
+
+                _context.Records.Add(newRecord);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(record);
+            return View(addRecordViewModel);
         }
 
         // GET: Record/Edit/5
