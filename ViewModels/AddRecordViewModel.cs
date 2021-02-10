@@ -10,7 +10,12 @@ namespace inTune.ViewModels
 {
     public class AddRecordViewModel
     {
-        [Required(ErrorMessage = "Name is required")]
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "Artist is required")]
+        public string Artist { get; set; }
+
+        [Required(ErrorMessage = "Title is required")]
         [StringLength(120, MinimumLength = 3, ErrorMessage = "Title must be between 3 and 120 characters")]
         public string Title { get; set; }
 
@@ -19,23 +24,23 @@ namespace inTune.ViewModels
 
         public int NumOfTracks { get; set; }
 
-        [Required(ErrorMessage = "Artist is required")]
-        [Display(Name = "Artist")]
-        public int ArtistId { get; set; }
+        [Required(ErrorMessage = "Genre is required")]
+        [Display(Name = "Genre")]
+        public int GenreId { get; set; }
 
-        public List<SelectListItem> Artists { get; set; }
+        public List<SelectListItem> Genres { get; set; }
 
-        public AddRecordViewModel(List<Artist> artists)
+        public AddRecordViewModel(List<Genre> genres)
         {
-            this.Artists = new List<SelectListItem>();
+            this.Genres = new List<SelectListItem>();
 
-            foreach (var artist in artists)
+            foreach (var genre in genres)
             {
-                Artists.Add(
+                Genres.Add(
                     new SelectListItem
                     {
-                        Value = artist.Id.ToString(),
-                        Text = artist.Name
+                        Value = genre.Id.ToString(),
+                        Text = genre.Name
                     }
                 );
             }

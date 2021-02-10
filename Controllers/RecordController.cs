@@ -30,7 +30,7 @@ namespace inTune.Controllers
                 records = records.Where(s => s.Title.Contains(searchString));
             }
 
-            return View(await records.Include(r => r.Artist).ToListAsync());
+            return View(await records.Include(r => r.Genre).ToListAsync());
         }
 
         // GET: Record/Details/5
@@ -41,7 +41,8 @@ namespace inTune.Controllers
                 return NotFound();
             }
 
-            var record = await _context.Records.Include(r => r.Artist)
+            var record = await _context.Records
+                .Include(r => r.Genre)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (record == null)
             {
@@ -54,8 +55,8 @@ namespace inTune.Controllers
         // GET: Record/Create
         public IActionResult Create()
         {
-            List<Artist> artists = _context.Artists.ToList();
-            AddRecordViewModel addRecordViewModel = new AddRecordViewModel(artists);
+            List<Genre> genres = _context.Genres.ToList();
+            AddRecordViewModel addRecordViewModel = new AddRecordViewModel(genres);
 
             return View(addRecordViewModel);
         }
@@ -70,14 +71,15 @@ namespace inTune.Controllers
         {
             if (ModelState.IsValid)
             {
-                Artist theArtist = _context.Artists.Find(addRecordViewModel.ArtistId);
+                Genre theGenre = _context.Genres.Find(addRecordViewModel.GenreId);
 
                 Record newRecord = new Record
                 {
+                    Artist = addRecordViewModel.Artist,
                     Title = addRecordViewModel.Title,
                     Year = addRecordViewModel.Year,
                     NumOfTracks = addRecordViewModel.NumOfTracks,
-                    Artist = theArtist
+                    Genre = theGenre
                 };
 
                 _context.Records.Add(newRecord);
@@ -147,6 +149,7 @@ namespace inTune.Controllers
             }
 
             var record = await _context.Records
+                .Include(r => r.Genre)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (record == null)
             {

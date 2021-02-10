@@ -22,7 +22,7 @@ namespace inTune.Controllers
         // GET: Genre
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Genre.ToListAsync());
+            return View(await _context.Genres.ToListAsync());
         }
 
         // GET: Genre/Details/5
@@ -33,7 +33,7 @@ namespace inTune.Controllers
                 return NotFound();
             }
 
-            var genre = await _context.Genre
+            var genre = await _context.Genres
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (genre == null)
             {
@@ -73,7 +73,7 @@ namespace inTune.Controllers
                 return NotFound();
             }
 
-            var genre = await _context.Genre.FindAsync(id);
+            var genre = await _context.Genres.FindAsync(id);
             if (genre == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace inTune.Controllers
                 return NotFound();
             }
 
-            var genre = await _context.Genre
+            var genre = await _context.Genres
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (genre == null)
             {
@@ -139,15 +139,15 @@ namespace inTune.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var genre = await _context.Genre.FindAsync(id);
-            _context.Genre.Remove(genre);
+            var genre = await _context.Genres.FindAsync(id);
+            _context.Genres.Remove(genre);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool GenreExists(int id)
         {
-            return _context.Genre.Any(e => e.Id == id);
+            return _context.Genres.Any(e => e.Id == id);
         }
     }
 }
